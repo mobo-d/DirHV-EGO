@@ -1,8 +1,8 @@
 # DirHV-EGO
 
-Code for the following paper: 
+Code for the following article: 
 
-> **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation, 2023. [[Preprint PDF](https://ieeexplore.ieee.org/document/10093980)]** <br/>
+> **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation, 2023. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/ielx7/4235/4358751/10093980/supp1-3265347.pdf?arnumber=10093980)]** <br/>
 
 <img src="./DirHVI.png" width="100%">
 
@@ -21,13 +21,9 @@ Code for the following paper:
 
 * Objective space normalization
 * Modeling (build GP models for each objective)
-
 * Maximization of DirHV-EI 
-
   > Use MOEA/D to maximize the DirHV-EI values with respect to $N$ direction vectors in a collaborative manner, and $N$ candidate solutions can be obtained.
-
 * Subset selection (select $q$ query points from the candidate solutions)
-
 * Parallel evaluation of true objective vectors
 
   > Evaluate the true objective vectors at $q$ query points on multiple parallel computing resources (e.g., on $q$ machines).
