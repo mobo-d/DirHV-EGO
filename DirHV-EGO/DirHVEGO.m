@@ -1,6 +1,6 @@
 classdef DirHVEGO < ALGORITHM
 % <multi/many> <real> <expensive>
-% DirHV-EGO: Efficient Global Optimization via Hypervolume-Guided Decomposition 
+% DirHV-EGO: Multiobjective Efficient Global Optimization via Hypervolume-Guided Decomposition 
 % q    ---   5 --- Batch size  
 % maxIter --- 50 --- The maximum number of iterations in inner optimization
 
@@ -41,7 +41,7 @@ classdef DirHVEGO < ALGORITHM
             while Algorithm.NotTerminated(D_pop(FrontNo==1))
               %% Line 3 in Algorithm 1：Scale the objective values 
                 D_decs = D_pop.decs; D_objs = D_pop.objs;
-				D_objs_Scaled = (D_objs-repmat(min(D_objs),size(D_decs,1),1))./repmat(max(D_objs)-min(D_objs),size(D_decs,1),1); 
+		D_objs_Scaled = (D_objs-repmat(min(D_objs),size(D_decs,1),1))./repmat(max(D_objs)-min(D_objs),size(D_decs,1),1); 
          
              
               %% Line 4 in Algorithm 1：Bulid GP model for each objective function 
@@ -49,7 +49,7 @@ classdef DirHVEGO < ALGORITHM
                   % to optimize the hyperparameters of GP. Additionally, it is suggested to perform hyperparameter 
                   % optimization in the log scale (i.e., setting t=log \theta) to achieve better results.
                 for i = 1 : Problem.M
-                    GPModels{i}= Dacefit(D_decs,D_objs_Scaled(:,i),'regpoly0','corrgauss',theta{i},1e-6*ones(1,Problem.D),100*ones(1,Problem.D));
+                    GPModels{i}= Dacefit(D_decs,D_objs_Scaled(:,i),'regpoly0','corrgauss',theta{i},1e-6*ones(1,Problem.D),20*ones(1,Problem.D));
                     theta{i}   = GPModels{i}.theta;
                 end 
                 
