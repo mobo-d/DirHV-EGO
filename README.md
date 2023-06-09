@@ -1,6 +1,6 @@
 # DirHV-EGO
 
-Code for the following article: 
+Official Code for the following article: 
 
 > **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation, 2023. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/ielx7/4235/4358751/10093980/supp1-3265347.pdf?arnumber=10093980)]** <br/>
 
@@ -30,12 +30,13 @@ Code for the following article:
 
 ## Quick Start
 
-* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.1, Matlab 2021b) and read the Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
+* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.2, Matlab 2020b) and read the Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
 * Copy the folders named "**DirHV-EGO**" and "**dace-does**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path .
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
 * Select the label "**expensive**" and choose the algorithm **"DirHV-EGO"**.
   * Default setting of `batch size q`: 5.
   * Default setting of `maxIter`: 50. 
+  * If `C0=0`, the number of initial samples is set as 11*D-1. 
 * Select a problem and set appropriate parameters.
   * e.g., ZDT1, N=200, M=2, D=8, maxFE=200.
   * e.g., Inverted DTLZ2,  N=210, M=3, D=6, maxFE=300.
