@@ -54,7 +54,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Algorithm 2 & Algorithm 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 function [Pop_EID,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,Lambda,Xi,GPModels)
 %% Algorithm 2: using MOEA/D-GR to solve subproblems
-    maxIter = 50；
+    maxIter = 50;
     %% neighbourhood   
     T       = ceil(Problem.N/10); % size of neighbourhood: 0.1*N
     B       = pdist2(Lambda,Lambda);
