@@ -1,4 +1,4 @@
-function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,maxIter,q)
+function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
 % Maximizing N Subproblems and Selecting Batch of Points 
 % Expected Direction-based Hypervolume Improvement (DirHV-EI, denoted as EI_D)
  
@@ -16,7 +16,7 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,maxIter,q)
 % Computational Intelligence Magazine, 2017, 12(4): 73-87".
 %--------------------------------------------------------------------------
 
-% This function is written by Liang Zhao.
+% This function was written by Liang Zhao.
 % https://github.com/mobo-d/DirHV-EGO
 
  
@@ -32,7 +32,7 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,maxIter,q)
      [Xi,Lambda] = CalXi(Objs_ND,W,Z);  
   
    %% Use MOEA/D to maximize DirHV-EI
-    [~,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,maxIter,Lambda,Xi,GPModels);
+    [~,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,Lambda,Xi,GPModels);
  
     %% Line 11 in Algorithm 2：discard the duplicate candidates
     [PopDec,ia,~] = unique(PopDec,'rows'); 
@@ -44,7 +44,7 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,maxIter,q)
 	for j = 1 : L
 		EIDs(j,:) = EI_D_Cal(repmat(Pop_u(j,:),Problem.N,1),repmat(Pop_s(j,:),Problem.N,1),Xi); 
 	end
-	%% find q solutions with greedy algorithm
+	%% find q solutions with the greedy algorithm
 	Batch_size = min(Problem.maxFE - Problem.FE,q); % the total budget is Problem.maxFE 
 	Qb = Submodular_max(EIDs,Batch_size);  
  
@@ -52,8 +52,9 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,maxIter,q)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Algorithm 2 & Algorithm 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-function [Pop_EID,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,maxIter,Lambda,Xi,GPModels)
+function [Pop_EID,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,Lambda,Xi,GPModels)
 %% Algorithm 2: using MOEA/D-GR to solve subproblems
+    maxIter = 50；
     %% neighbourhood   
     T       = ceil(Problem.N/10); % size of neighbourhood: 0.1*N
     B       = pdist2(Lambda,Lambda);
@@ -78,7 +79,7 @@ function [Pop_EID,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,maxIter,Lambda,Xi,GPMo
            [Off_u,Off_s]= Evaluate(OffDec,GPModels);  
             
            %% Global Replacement  MOEA/D-GR
-           % Find the most approprite subproblem and its neighbourhood
+           % Find the most appropriate subproblem and its neighborhood
             EID_all = EI_D_Cal(repmat(Off_u,Problem.N,1),repmat(Off_s,Problem.N,1),Xi);
             [~,best_index] = max(EID_all);
 
@@ -117,7 +118,7 @@ function [Xi,Lambda] = CalXi(A,W,Z)
 % % L(A,w,z) = min max (A-z)./Lambda % used for Eq.11 
 % % In:
 % % A     : L*M  observed objectives 
-% % W     : N*M  weight vertors
+% % W     : N*M  weight vectors
 % % Z     : 1*M  reference point
 % % Return:
 % % Xi    : N*1  intersection points, one for each direction vector 
