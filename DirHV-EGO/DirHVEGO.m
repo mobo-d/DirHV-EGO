@@ -2,8 +2,6 @@ classdef DirHVEGO < ALGORITHM
 % <multi/many> <real> <expensive>
 % DirHV-EGO: Multiobjective Efficient Global Optimization via Hypervolume-Guided Decomposition 
 % q    ---   5 --- Batch size  
-% maxIter --- 50 --- The maximum number of iterations in inner optimization
-% C0   ---   0  --- Number of initial samples. Default setting: 11D-1.
 
 %------------------------------- Reference --------------------------------
 % L. Zhao and Q. Zhang, Hypervolume-Guided Decomposition for Parallel 
@@ -19,17 +17,15 @@ classdef DirHVEGO < ALGORITHM
 % Computational Intelligence Magazine, 2017, 12(4): 73-87".
 %--------------------------------------------------------------------------
 
-% This function is written by Liang Zhao.
+% This function was written by Liang Zhao.
 % https://github.com/mobo-d/DirHV-EGO
 
     methods
         function main(Algorithm,Problem)
             %% Parameter setting
-            [q,maxIter,C0] = Algorithm.ParameterSet(5,50,0);
-            if C0 == 0
-                C0 = 11*Problem.D-1; % number of initial samples
-            end
-
+            q = Algorithm.ParameterSet(5);
+            C0 = 11*Problem.D-1; % number of initial samples
+            
             %% Initial hyperparameters for GP
             GPModels = cell(1,Problem.M);   theta = cell(1,Problem.M);
             theta(:) = {(C0 ^ (-1./C0)).*ones(1,Problem.D)};
@@ -57,7 +53,7 @@ classdef DirHVEGO < ALGORITHM
                 end 
                 
               %% Line 5 in Algorithm 1： Maximize DirHV-EI using the MOEA/D framework and select q candidate points
-                 SelectDecs = Opt_DirHV_EI(Problem,GPModels,D_objs_Scaled(FrontNo==1,:),maxIter,q); 
+                 SelectDecs = Opt_DirHV_EI(Problem,GPModels,D_objs_Scaled(FrontNo==1,:),q); 
               
               %% Line 6 in Algorithm 1： Aggregate data
                 D_pop = [D_pop,Problem.Evaluation(SelectDecs)];
