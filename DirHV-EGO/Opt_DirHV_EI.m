@@ -1,11 +1,11 @@
 function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
-% Maximizing N Subproblems and Selecting Batch of Points 
+% Maximizing N Subproblems and Selecting Batch of Query Points 
 % Expected Direction-based Hypervolume Improvement (DirHV-EI, denoted as EI_D)
  
 %------------------------------- Reference --------------------------------
 % L. Zhao and Q. Zhang, Hypervolume-Guided Decomposition for Parallel 
 % Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary 
-% Computation, 2023.
+% Computation, 2024, 28(2): 432-444.
  
 %------------------------------- Copyright --------------------------------
 % Copyright (c) 2018-2019 BIMK Group. You are free to use the PlatEMO for
@@ -21,13 +21,18 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
 
  
    %% Generate the initial direction vectors
+   params_N =  [200,210,295,456,462]; % # of weight vectors for Problem.M = 2,3,4,5,6 respectively.
     if Problem.M <= 3
-        [W, Problem.N]  = UniformPoint(Problem.N,Problem.M); % simplex-lattice design 
+        [W, Problem.N]  = UniformPoint(params_N(Problem.M-1),Problem.M); % simplex-lattice design 
+    elseif Problem.M <= 6
+        [W, Problem.N]  = UniformPoint(params_N(Problem.M-1),Problem.M,'ILD'); % incremental lattice design
     else
-        [W, Problem.N]  = UniformPoint(Problem.N,Problem.M,'ILD'); % incremental lattice design
+        [W, Problem.N]  = UniformPoint(500,Problem.M,'ILD'); % incremental lattice design
+        disp('Warning: The computational complexity of DirHV-EGO is quadratic to the number of reference vectors!');
     end
    %% Utopian point
      Z = -0.01.*ones([1,Problem.M]); % Adaptively adjusting Z may lead to better performance.
+
    %% Calculate the Intersection points and Direction vectors
      [Xi,Lambda] = CalXi(Objs_ND,W,Z);  
   
@@ -54,7 +59,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Algorithm 2 & Algorithm 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 function [Pop_EID,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,Lambda,Xi,GPModels)
 %% Algorithm 2: using MOEA/D-GR to solve subproblems
-    maxIter = 50;
+    % In order to find the maximum value of DirHV-EI for each sub-problem, 
+    % it is recommended to set the maximum number of iterations to at least 50.
+    maxIter = 50; 
     %% neighbourhood   
     T       = ceil(Problem.N/10); % size of neighbourhood: 0.1*N
     B       = pdist2(Lambda,Lambda);
@@ -87,10 +94,10 @@ function [Pop_EID,PopDec,Pop_u,Pop_s] = MOEAD_GR_(Problem,Lambda,Xi,GPModels)
             % Update the solutions in P
            offindex = P(Pop_EID(P)<EID_all(P));
            if ~isempty(offindex)
-               PopDec(offindex,:) = repmat(OffDec,length(offindex),1); 
-               Pop_u(offindex,:) = repmat(Off_u,length(offindex),1);
-               Pop_s(offindex,:) = repmat(Off_s,length(offindex),1);
-               Pop_EID(offindex) = EID_all(offindex);
+               PopDec(offindex,:) = repmat(OffDec,length(offindex),1); % PopDec: N*D
+               Pop_u(offindex,:) = repmat(Off_u,length(offindex),1); % Pop_u: N*M
+               Pop_s(offindex,:) = repmat(Off_s,length(offindex),1); % Pop_s: N*M
+               Pop_EID(offindex) = EID_all(offindex); % Pop_EID: N*1
            end
        end   
     end
@@ -117,7 +124,7 @@ function [Xi,Lambda] = CalXi(A,W,Z)
 % % calculate the minimum of mTch for each direction
 % % L(A,w,z) = min max (A-z)./Lambda % used for Eq.11 
 % % In:
-% % A     : L*M  observed objectives 
+% % A     : n*M  observed objectives 
 % % W     : N*M  weight vectors
 % % Z     : 1*M  reference point
 % % Return:
@@ -130,15 +137,16 @@ function [Xi,Lambda] = CalXi(A,W,Z)
     Lambda = W_./repmat(sqrt(sum(W_.^2,2)),1,M);
 	
 	%% Eq. 11, compute the intersection points
-    Lambda_ = 1./Lambda;    A = A-Z; % L*M
-    G = Lambda_(:,1)*A(:,1)'; % N*L, f1
+    Lambda_ = 1./Lambda; % N*M
+    A = A-Z; % n*M
+    temp = Lambda_(:,1)*A(:,1)'; % N*n, f1
     for j = 2:M
-        G = max(G,Lambda_(:,j)*A(:,j)'); % N*L, max(fi,fj)
+        temp = max(temp,Lambda_(:,j)*A(:,j)'); % N*n, max(fi,fj)
     end
     % minimum of mTch for each direction vector
-    Lmin = min(G,[],2); % N*1  one for each direction vector 
+    Lmin = min(temp,[],2); % N*1  one for each direction vector 
     % N*M  Intersection points
-    Xi = repmat(Z,N,1) + repmat(Lmin,1,M).*Lambda; 
+    Xi = repmat(Z,N,1) + repmat(Lmin,1,M).*Lambda; % Eq.11
 end 
 
 
@@ -160,7 +168,7 @@ function [u,s] = Evaluate(X,model)
     N = size(X,1); % number of samples
     M = length(model); % number of objectives
     u = zeros(N,M); % predictive mean
-    MSE = zeros(N,M); % predictive SME
+    MSE = zeros(N,M); % predictive MSE
     if N == 1 
         for j = 1 : M
             [u(:,j),~,MSE(:,j)] = Predictor(X,model{1,j}); % DACE Kriging toolbox

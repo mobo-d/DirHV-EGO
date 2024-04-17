@@ -1,12 +1,13 @@
 classdef DirHVEGO < ALGORITHM
 % <multi/many> <real> <expensive>
 % DirHV-EGO: Multiobjective Efficient Global Optimization via Hypervolume-Guided Decomposition 
-% q    ---   5 --- Batch size  
+% q    ---   5 --- Batch size, i.e. number of function evaluations per iteration
+% NI   ---   0 --- number of initial samples, If the parameter is 0, NI=11d-1. 
 
 %------------------------------- Reference --------------------------------
 % L. Zhao and Q. Zhang, Hypervolume-Guided Decomposition for Parallel 
 % Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary 
-% Computation, 2023.
+% Computation, 2024, 28(2): 432-444.
 
 %------------------------------- Copyright --------------------------------
 % Copyright (c) 2021 BIMK Group. You are free to use the PlatEMO for
@@ -23,26 +24,25 @@ classdef DirHVEGO < ALGORITHM
     methods
         function main(Algorithm,Problem)
             %% Parameter setting
-            q = Algorithm.ParameterSet(5);
-            C0 = 11*Problem.D-1; % number of initial samples
+            [q, NI] = Algorithm.ParameterSet(5,0); 
+            if NI == 0, NI = 11*Problem.D-1;end % number of initial samples
             
             %% Initial hyperparameters for GP
             GPModels = cell(1,Problem.M);   theta = cell(1,Problem.M);
-            theta(:) = {(C0 ^ (-1./C0)).*ones(1,Problem.D)};
+            theta(:) = {(NI ^ (-1./NI)).*ones(1,Problem.D)};
             
-            %% Generate initial design using OLHS or other DOE methods
-            Decs = srgtsESEAOLHSdesign(C0,Problem.D,50,5);% OLHS (npoints, ndv,maxiter, maxstalliter);
-            %Decs = UniformPoint(C0,Problem.D,'Latin'); %  LSH in PlatEMO
-            D_pop = Problem.Evaluation(repmat(Problem.upper-Problem.lower,C0,1).*Decs+repmat(Problem.lower,C0,1));     
-            [FrontNo,~] = NDSort(D_pop.objs,1); % find non-dominated solutions
+            %% Generate initial design using LHS or other DOE methods
+            %X_init = srgtsESEAOLHSdesign(C0,Problem.D,50,5);% OLHS (npoints, ndv,maxiter, maxstalliter);
+            X_init = UniformPoint(NI,Problem.D,'Latin'); %  LSH in PlatEMO
+            Dn = Problem.Evaluation(repmat(Problem.upper-Problem.lower,NI,1).*X_init+repmat(Problem.lower,NI,1));     
+            [FrontNo,~] = NDSort(Dn.objs,1); % find non-dominated solutions
 			
             %% Optimization
-            while Algorithm.NotTerminated(D_pop(FrontNo==1))
+            while Algorithm.NotTerminated(Dn(FrontNo==1))
               %% Line 3 in Algorithm 1：Scale the objective values 
-                D_decs = D_pop.decs; D_objs = D_pop.objs;
-		D_objs_Scaled = (D_objs-repmat(min(D_objs),size(D_decs,1),1))./repmat(max(D_objs)-min(D_objs),size(D_decs,1),1); 
+                D_decs = Dn.decs; D_objs = Dn.objs;
+		        D_objs_Scaled = (D_objs-repmat(min(D_objs),size(D_decs,1),1))./repmat(max(D_objs)-min(D_objs),size(D_decs,1),1); 
          
-             
               %% Line 4 in Algorithm 1：Bulid GP model for each objective function 
                   % Note that if Problem.D > 8, it is recommended to use either the DE or Multi-start SQP methods 
                   % to optimize the hyperparameters of GP. Additionally, it is suggested to perform hyperparameter 
@@ -53,11 +53,11 @@ classdef DirHVEGO < ALGORITHM
                 end 
                 
               %% Line 5 in Algorithm 1： Maximize DirHV-EI using the MOEA/D framework and select q candidate points
-                 SelectDecs = Opt_DirHV_EI(Problem,GPModels,D_objs_Scaled(FrontNo==1,:),q); 
+                NewDecs = Opt_DirHV_EI(Problem,GPModels,D_objs_Scaled(FrontNo==1,:),q); % q*Problem.D
               
               %% Line 6 in Algorithm 1： Aggregate data
-                D_pop = [D_pop,Problem.Evaluation(SelectDecs)];
-                [FrontNo,~] = NDSort(D_pop.objs,1);
+                Dn = [Dn,Problem.Evaluation(NewDecs)];
+                [FrontNo,~] = NDSort(Dn.objs,1);
  
             end
         end
