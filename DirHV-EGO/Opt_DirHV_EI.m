@@ -27,7 +27,7 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
     elseif Problem.M <= 6
         [W, Problem.N]  = UniformPoint(params_N(Problem.M-1),Problem.M,'ILD'); % incremental lattice design
     else
-        [W, Problem.N]  = UniformPoint(500,Problem.M,'ILD'); % incremental lattice design
+        [W, Problem.N]  = UniformPoint(400,Problem.M,'ILD'); % incremental lattice design
         disp('Warning: The computational complexity of DirHV-EGO is quadratic to the number of reference vectors!');
     end
    %% Utopian point
