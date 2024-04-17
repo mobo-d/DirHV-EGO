@@ -1,4 +1,4 @@
-function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
+function [NewDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
 % Maximizing N Subproblems and Selecting Batch of Query Points 
 % Expected Direction-based Hypervolume Improvement (DirHV-EI, denoted as EI_D)
  
@@ -28,7 +28,7 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
         [W, Problem.N]  = UniformPoint(params_N(Problem.M-1),Problem.M,'ILD'); % incremental lattice design
     else
         [W, Problem.N]  = UniformPoint(400,Problem.M,'ILD'); % incremental lattice design
-        disp('Warning: The computational complexity of DirHV-EGO is quadratic to the number of reference vectors!');
+        %disp('Warning: The computational complexity of DirHV-EGO is quadratic to the number of reference vectors!');
     end
    %% Utopian point
      Z = -0.01.*ones([1,Problem.M]); % Adaptively adjusting Z may lead to better performance.
@@ -45,15 +45,15 @@ function [SelectDecs] = Opt_DirHV_EI(Problem,GPModels,Objs_ND,q)
 
  
     %% Compute EI_D for all the points in Q
-	L = size(PopDec,1); EIDs = zeros(L,Problem.N);
-	for j = 1 : L
-		EIDs(j,:) = EI_D_Cal(repmat(Pop_u(j,:),Problem.N,1),repmat(Pop_s(j,:),Problem.N,1),Xi); 
-	end
-	%% find q solutions with the greedy algorithm
-	Batch_size = min(Problem.maxFE - Problem.FE,q); % the total budget is Problem.maxFE 
-	Qb = Submodular_max(EIDs,Batch_size);  
+    L = size(PopDec,1); EIDs = zeros(L,Problem.N);
+    for j = 1 : L
+	EIDs(j,:) = EI_D_Cal(repmat(Pop_u(j,:),Problem.N,1),repmat(Pop_s(j,:),Problem.N,1),Xi); 
+    end
+    %% find q solutions with the greedy algorithm
+    Batch_size = min(Problem.maxFE - Problem.FE,q); % the total budget is Problem.maxFE 
+    Qb = Submodular_max(EIDs,Batch_size);  
  
-    SelectDecs = PopDec(Qb,:); 
+    NewDecs = PopDec(Qb,:); 
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Algorithm 2 & Algorithm 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
