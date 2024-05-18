@@ -1,8 +1,8 @@
 # DirHV-EGO
 
-Official Code for the following article: 
+Official Matlab Code for the following article: 
 
-> **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  2024, 28(2): 432-444. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/ielx7/4235/4358751/10093980/supp1-3265347.pdf?arnumber=10093980)]** <br/>
+> **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  28(2): 432-444, 2024. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/document/10093980/media#media)]** <br/>
 
 <img src="./DirHVI.png" width="100%">
 
@@ -34,7 +34,7 @@ Official Code for the following article:
 * Copy the folders named "**DirHV-EGO**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path.
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
 * Select the label "**expensive**" and choose the algorithm **"DirHV-EGO"**.
-  * Default setting of `batch size q`: 5.
+  * Default setting of `batch size`: 5.
   * Default setting of `number of initial samples`: $11d-1$.
 * Select a problem and set appropriate parameters.
   * e.g., ZDT1, N=200, M=2, D=8, maxFE=200.
@@ -47,7 +47,7 @@ If you have any questions or feedback, please feel free to contact  liazhao5-c@m
 ## Citation
 If you find our work is helpful to your research, please cite our paper:
 ```
-@article{zhao2023hypervolume,
+@article{zhao2024hypervolume,
   author={Zhao, Liang and Zhang, Qingfu},
   journal={IEEE Transactions on Evolutionary Computation}, 
   title={Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization}, 
