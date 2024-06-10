@@ -1,6 +1,6 @@
 # DirHV-EGO
 
-**The Python implementation of DirHV-EGO is available at [LibMOON](https://github.com/xzhang2523/libmoon). This repository contains the official Matlab code.** 
+**This repository contains the Matlab code of DirHV-EGO. The Python implementation is available at [LibMOON](https://github.com/xzhang2523/libmoon).** 
 
 > **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  28(2): 432-444, 2024. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/document/10093980/media#media)]** <br/>
 
@@ -28,7 +28,7 @@ Matlab >= 2018a
 ### Advanced usage
 
 * Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.6, Matlab >= 2018a) and read PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
-* Copy the folders within "**./DirHV-EGO/Algorithms**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path.
+* Copy the folders within "**Algorithms**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path.
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
 * Select the label "**expensive**" and choose the algorithm **"DirHV-EGO"**.
   * Default setting of `batch size`: 5.
