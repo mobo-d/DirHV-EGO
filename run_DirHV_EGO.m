@@ -44,7 +44,7 @@ for id = 1:1:length(ins_list)
     ylabel(append('log IGD+'));    
      title(sprintf('%s (DirHV-EGO)', prob_name));
     currentFile = mfilename('fullpath');
-    filename = fullfile(fileparts(currentFile),sprintf('\\Data\\figs\\%s_%s_M%d_D%d_logIGDp',class(Alg),class(Pro),Pro.M,Pro.D));
+    filename = fullfile(fileparts(currentFile),sprintf('\\Data\\%s_%s_M%d_D%d_logIGDp',class(Alg),class(Pro),Pro.M,Pro.D));
     saveas(gcf,[filename,'.pdf'])
 end
  
