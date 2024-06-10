@@ -1,6 +1,6 @@
 # DirHV-EGO
 
-Official Matlab Code for the following article: 
+**The Python implementation of DirHV-EGO is available at [LibMOON](https://github.com/xzhang2523/libmoon). This repository contains the official Matlab code.** 
 
 > **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  28(2): 432-444, 2024. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/document/10093980/media#media)]** <br/>
 
@@ -17,21 +17,18 @@ Official Matlab Code for the following article:
 * It is defined as the expectation of DirHVI over the Gaussian process (GP) posterior $p(\boldsymbol{y}|\boldsymbol{x},\mathcal{D})$.
 * It has a simple closed-form expression and is very cheap to compute.
 
-**Main Steps at Each Iteration of DirHV-EGO:**
+## Usage 
 
-* Objective space normalization
-* Modeling (build GP models for each objective)
-* Maximization of DirHV-EI 
-  > Use MOEA/D to maximize the DirHV-EI values with respect to $N$ direction vectors in a collaborative manner, and $N$ candidate solutions can be obtained.
-* Subset selection (select $q$ query points from the candidate solutions)
-* Parallel evaluation of true objective vectors
+Matlab >= 2018a
 
-  > Evaluate the true objective vectors at $q$ query points on multiple parallel computing resources (e.g., on $q$ machines).
+### Quick Start
 
-## Quick Start
+* The `run_DirHV_EGO.m` provides the basic script to run experiments on ZDT and DTLZ.
 
-* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.6, Matlab >= 2018a) and read Chapter III of PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
-* Copy the folders named "**DirHV-EGO**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path.
+### Advanced usage
+
+* Download [PlatEMO](https://github.com/BIMK/PlatEMO) (version 4.6, Matlab >= 2018a) and read PlatEMO's [User Manual](https://github.com/BIMK/PlatEMO/blob/master/PlatEMO/manual.pdf) to familiarize yourself with how to use this platform.
+* Copy the folders within "**./DirHV-EGO/Algorithms**" into the directory at **"PlatEMO/Algorithms/"**. Next, add all of the subfolders contained within the "PlatEMO" directory to the MATLAB search path.
 * In the MATLAB command window, type **`platemo()`** to run PlatEMO using the GUI.
 * Select the label "**expensive**" and choose the algorithm **"DirHV-EGO"**.
   * Default setting of `batch size`: 5.
@@ -62,4 +59,3 @@ If you find our work is helpful to your research, please cite our paper:
 ## Acknowledgements
 * This implementation is based on [PlatEMO](https://github.com/BIMK/PlatEMO).
 * For GP modeling, we leverage the [DACE toolbox](https://www.omicron.dk/dace.html).
-* For the Design of Experiment methods, we utilize existing implementations from the [SURROGATES Toolbox](https://sites.google.com/site/felipeacviana/surrogates-toolbox).
