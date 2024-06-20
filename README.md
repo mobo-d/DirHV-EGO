@@ -1,6 +1,6 @@
 # DirHV-EGO
 
-**This repository contains the Matlab code of DirHV-EGO. The Python implementation is available at [LibMOON](https://github.com/xzhang2523/libmoon).** 
+**This repository contains the Matlab code of DirHV-EGO, EHVI-EGO, and KB&EHVI-EGO. The Python implementation of DirHV-EGO is available at [LibMOON](https://github.com/xzhang2523/libmoon).** 
 
 > **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  28(2): 432-444, 2024. [[PDF](https://ieeexplore.ieee.org/document/10093980)] [[Supplementary](https://ieeexplore.ieee.org/document/10093980/media#media)]** <br/>
 
