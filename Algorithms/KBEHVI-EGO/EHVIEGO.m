@@ -17,7 +17,7 @@ classdef EHVIEGO < ALGORITHM
 %--------------------------------------------------------------------------
 
 % This function was written by Liang Zhao.
-% https://github.com/mobo-d/R2D-EGO
+% https://github.com/mobo-d/DirHV-EGO
 
     methods
         function main(Algorithm,Problem)
