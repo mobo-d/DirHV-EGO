@@ -1,12 +1,7 @@
 function new_x = Opt_DirHV_EI(M,D,xlower,xupper,GPModels,train_y_nds,Batch_size)
 % Maximizing N Subproblems and Selecting Batch of Query Points 
 % Expected Direction-based Hypervolume Improvement (DirHV-EI, denoted as EI_D)
- 
-%------------------------------- Reference --------------------------------
-% Liang Zhao and Qingfu Zhang, Hypervolume-Guided Decomposition for Parallel 
-% Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary 
-% Computation, 28(2): 432-444, 2024.
- 
+
 %------------------------------- Copyright --------------------------------
 % Copyright (c) 2024 BIMK Group. You are free to use the PlatEMO for
 % research purposes. All publications which use this platform or any code
@@ -19,10 +14,9 @@ function new_x = Opt_DirHV_EI(M,D,xlower,xupper,GPModels,train_y_nds,Batch_size)
 % This function was written by Liang Zhao.
 % https://github.com/mobo-d/DirHV-EGO
 
- 
    %% Generate the initial reference vectors
     % # of weight vectors：M = 2,  3,  4,  5,  6  
-    num_weights    =        [200,210,295,456,462]; 
+    num_weights = [200,210,295,456,462]; 
     if M <= 3
         [ref_vecs, ~]  = UniformPoint(num_weights(M-1), M); % simplex-lattice design 
     elseif M <= 6
@@ -135,7 +129,6 @@ function [xis,dir_vecs] = get_xis(train_y_nds,ref_vecs,z)
     norm_temp = sqrt(sum(temp.^2, 2));
     dir_vecs = temp ./ norm_temp;
     
-	
 	%% Eq. 11, compute the intersection points
     div_dir = 1./dir_vecs; % N*M
     train_y_translated = train_y_nds-z; % n*M
@@ -148,7 +141,6 @@ function [xis,dir_vecs] = get_xis(train_y_nds,ref_vecs,z)
     % N*M  Intersection points
     xis = z + Lmin.*dir_vecs;% Eq.11
 end 
-
 
 function DirHVEI = get_DirHVEI(u,sigma,xis)
 % calculate the EI_D(x|lambda) at multiple requests 
@@ -165,8 +157,7 @@ function DirHVEI = get_DirHVEI(u,sigma,xis)
 
     temp = xi_minus_u .* normcdf_tau + sigma .* normpdf_tau; % N*M
     DirHVEI = prod(temp,2);
-end
- 
+end 
  
 function [u,s] = GPEvaluate(X,model)
 % Predict the GP posterior mean and std at a set of the candidate solutions 
@@ -234,5 +225,4 @@ function Offspring = operator_DE(Parent1,Parent2,Parent3, xlower,xupper)
     temp = Site & mu>0.5; 
     Offspring(temp) = Offspring(temp)+(Upper(temp)-Lower(temp)).*(1-(2.*(1-mu(temp))+2.*(mu(temp)-0.5).*...
                       (1-(Upper(temp)-Offspring(temp))./(Upper(temp)-Lower(temp))).^(disM+1)).^(1/(disM+1)));
- 
 end
