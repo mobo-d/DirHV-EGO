@@ -2,7 +2,7 @@
 
 **This repository contains the Matlab code of DirHV-EGO, EHVI-EGO, and KB&EHVI-EGO.** 
 
-> **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  28(2): 432-444, 2024. [[Post-print PDF](https://scholars.cityu.edu.hk/files/242838612/144134803.pdf)] [[PDF](https://ieeexplore.ieee.org/document/10093980)]** <br/>
+> **Liang Zhao and Qingfu Zhang. Hypervolume-Guided Decomposition for Parallel Expensive Multiobjective Optimization. IEEE Transactions on Evolutionary Computation,  28(2): 432-444, 2024. [[Accepted Version](https://scholars.cityu.edu.hk/files/242838612/144134803.pdf)] [[PDF](https://ieeexplore.ieee.org/document/10093980)]** <br/>
 
 <img src="./DirHVI.png" width="100%">
 
