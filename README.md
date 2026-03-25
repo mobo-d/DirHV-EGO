@@ -23,7 +23,7 @@ Matlab >= 2018a
 
 ### Quick Start
 
-* The `run_DirHV_EGO.m` provides the basic script to run experiments on ZDT and DTLZ.
+* The `run_synthetic.m` provides the basic script to run experiments on ZDT and DTLZ.
 
 ### Advanced usage
 
@@ -38,7 +38,7 @@ Matlab >= 2018a
   * e.g., Inverted DTLZ2,  N=210, M=3, D=6, maxFE=300.
 
 
-If you have any questions or feedback, please feel free to contact  liazhao5-c@my.cityu.edu.hk and qingfu.zhang@cityu.edu.hk.
+If you have any questions or feedback, please feel free to contact  liang.zhao@cityu.edu.hk and qingfu.zhang@cityu.edu.hk.
 
 
 ## Citation
